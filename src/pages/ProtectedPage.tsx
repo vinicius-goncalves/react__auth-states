@@ -2,14 +2,14 @@ import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 function ProtectedPage(): JSX.Element {
-    const { user, setAuthStatus } = useAuth();
+    const { user, setUserAuthStatus } = useAuth();
 
     if (!user) {
         return <Navigate to="login" />;
     }
 
     function logout() {
-        setAuthStatus('loggedOut');
+        setUserAuthStatus(false);
     }
 
     return (

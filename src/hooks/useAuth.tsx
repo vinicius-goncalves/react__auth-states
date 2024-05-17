@@ -1,18 +1,21 @@
-import { authSlice } from "../store";
-import { useAppDispatch } from "./useAppDispatch";
-import { useAppSelector } from "./useAppSelector";
+// import { authSlice } from "../store";
+import { authActions } from '../store/slices/authSlice';
+import { useAppDispatch } from './useAppDispatch';
+import { useAppSelector } from './useAppSelector';
 
-export default function useAuth(): { user: boolean, setAuthStatus(status: 'loggedIn' | 'loggedOut'): void  } {
-
+export default function useAuth(): {
+    user: boolean | null;
+    setUserAuthStatus(status: boolean): void;
+} {
     const dispatch = useAppDispatch();
-    const { user } = useAppSelector(state => state.auth);
+    const { user } = useAppSelector((state) => state.auth);
 
-    const setAuthStatus = (status: 'loggedIn' | 'loggedOut') => {
-        dispatch(authSlice.actions.setAuthStatus(status));
-    }
+    const setUserAuthStatus = (status: boolean) => {
+        dispatch(authActions.setUserAuthStatus(status));
+    };
 
     return {
         user,
-        setAuthStatus
-    }
+        setUserAuthStatus,
+    };
 }

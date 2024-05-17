@@ -1,32 +1,25 @@
-import { Slice, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, Slice, createSlice } from '@reduxjs/toolkit';
 
 const user = localStorage.getItem('user')
-    ? JSON.parse(localStorage.getItem('user') as string) as boolean
-    : null;
+    ? (JSON.parse(localStorage.getItem('user') as string) as boolean)
+    : false;
 
-const authInitialState: { user: boolean | null } = {
-    user
-};
+const authInitialState: { user: boolean } = {
+    user,
+} satisfies { user: boolean };
 
 const authSlice: Slice = createSlice({
     name: 'auth',
     initialState: authInitialState,
     reducers: {
-        setAuthStatus(state, action) {
+        setUserAuthStatus(state, action: PayloadAction<boolean>) {
+            state.user = action.payload;
 
-            const status = action.payload;
-
-            if(status === 'loggedIn') {
-                localStorage.setItem('user', 'true');
-                state.user = true;
+            if (window && window.localStorage) {
+                localStorage.setItem('user', JSON.stringify(action.payload));
             }
-
-            if(status === 'loggedOut') {
-                localStorage.setItem('user', 'false');
-                state.user = false;
-            }
-        }
-    }
+        },
+    },
 });
 
 export const authActions = authSlice.actions;
